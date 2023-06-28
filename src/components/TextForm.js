@@ -4,7 +4,6 @@ export default function TextForm(props) {
   const [text, setText] = useState("");
 
   const handleUpClick = () => {
-    // console.log("Uppercase was clicked!");
     let newText = text.toUpperCase();
     setText(newText);
     props.showAlert("Converted to uppercase!", "success");
@@ -23,14 +22,11 @@ export default function TextForm(props) {
   };
 
   const handleOnChange = (event) => {
-    // console.log("On Change!");
     setText(event.target.value);
   };
 
   const handleCopy = () => {
-    var text = document.getElementById("myBox");
-    text.select();
-    navigator.clipboard.writeText(text.value);
+    navigator.clipboard.writeText(text);
     props.showAlert("Copied to clipboard!", "success");
   };
 
@@ -43,54 +39,86 @@ export default function TextForm(props) {
   return (
     <div
       style={{
-        backgroundColor: props.mode === "dark" ? "grey" : "white",
-        color: props.mode === "dark" ? "white" : "black",
+        backgroundColor: props.mode === "dark" ? "#042743" : "white",
+        color: props.mode === "dark" ? "white" : "#042743",
       }}
     >
       <div className="container">
-        <h1>{props.heading}</h1>
+        <h1 className="mb-4">{props.heading}</h1>
         <div className="mb-3">
           <textarea
             className="form-control"
             onChange={handleOnChange}
             value={text}
             style={{
-              backgroundColor: props.mode === "dark" ? "grey" : "white",
-              color: props.mode === "dark" ? "white" : "black",
+              backgroundColor: props.mode === "dark" ? "#13466e" : "white",
+              color: props.mode === "dark" ? "white" : "#042743",
             }}
             id="myBox"
             rows="8"
           ></textarea>
         </div>
-        <button className="btn btn-primary mx-1" onClick={handleUpClick}>
+        <button
+          className="btn btn-primary mx-1 my-1"
+          disabled={text.length === 0}
+          onClick={handleUpClick}
+        >
           Convert to Uppercase
         </button>
-        <button className="btn btn-primary mx-1" onClick={handleLowClick}>
+        <button
+          className="btn btn-primary mx-1 my-1"
+          disabled={text.length === 0}
+          onClick={handleLowClick}
+        >
           Convert to Lowercase
         </button>
-        <button className="btn btn-primary mx-1" onClick={handleClearClick}>
+        <button
+          className="btn btn-primary mx-1 my-1"
+          disabled={text.length === 0}
+          onClick={handleClearClick}
+        >
           Clear Text
         </button>
-        <button className="btn btn-primary mx-1" onClick={handleCopy}>
+        <button
+          className="btn btn-primary mx-1 my-1"
+          disabled={text.length === 0}
+          onClick={handleCopy}
+        >
           Copy Text
         </button>
-        <button className="btn btn-primary mx-1" onClick={handleExtraSpaces}>
+        <button
+          className="btn btn-primary mx-1 my-1"
+          disabled={text.length === 0}
+          onClick={handleExtraSpaces}
+        >
           Remove Extra Spaces
         </button>
       </div>
 
-      <div className="container my-4">
+      <div
+        className="container my-4"
+        style={{
+          color: props.mode === "dark" ? "white" : "#042743",
+        }}
+      >
         <h2>Your Text Summary</h2>
         <p>
-          {text.split(" ").length} words and {text.length} character.
+          {
+            text.split(/\s+/).filter((element) => {
+              return element.length !== 0;
+            }).length
+          }{" "}
+          words and {text.length} character.
         </p>
-        <p>{0.008 * text.split(" ").length} minutes to read the texts.</p>
-        <h2>Preview</h2>
         <p>
-          {text.length > 0
-            ? text
-            : "Enter Something in the textbox above to preview it here."}
+          {0.008 *
+            text.split(" ").filter((element) => {
+              return element.length !== 0;
+            }).length}{" "}
+          minutes to read the texts.
         </p>
+        <h2>Preview</h2>
+        <p>{text.length > 0 ? text : "Nothing to Preview!"}</p>
       </div>
     </div>
   );
